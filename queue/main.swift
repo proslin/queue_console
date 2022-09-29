@@ -13,7 +13,7 @@ struct Queue<T> {
     
     public typealias Element = T
     
-    fileprivate var array = [T?]()
+    fileprivate var array = [Element?]()
     fileprivate var head = 0
     
     public var isEmpty : Bool {
@@ -24,17 +24,17 @@ struct Queue<T> {
         return array.count - head
     }
     
-    public mutating func enqueue(_ element: T) {
+    public mutating func enqueue(_ element: Element) {
         array.append(element)
     }
     
-    public mutating func dequeue() -> T? {
+    public mutating func dequeue() -> Element? {
         guard head < array.count, let element = array[head] else { return nil }
         array[head] = nil
         head += 1
         
         let percentage = Double(head)/Double(array.count)
-        if array.count > 50 && percentage > 0.25 {
+        if array.count > 1 && percentage > 0.25 {
             array.removeFirst(head)
             head = 0
         }
@@ -42,8 +42,8 @@ struct Queue<T> {
         return element
     }
     
-    public mutating func filter(predicate:(T) -> Bool) -> Queue<T> {
-        var result = [T]()
+    public mutating func filter(predicate:(Element) -> Bool) -> Queue<Element> {
+        var result = [Element]()
         for i in array {
             if let elem = i, predicate(elem) {
                 result.append(elem)
@@ -54,7 +54,7 @@ struct Queue<T> {
         return Queue.init(array: array, head: head)
     }
     
-    subscript(_ idx: Int) -> T? {
+    subscript(_ idx: Int) -> Element? {
         guard (array.startIndex..<array.endIndex).contains(idx) else { return nil }
         return array[idx]
     }
@@ -67,6 +67,7 @@ queue.enqueue(1)
 queue.enqueue(2)
 queue.enqueue(3)
 queue.enqueue(4)
+queue.enqueue(5)
 queue.enqueue(8)
 
 
